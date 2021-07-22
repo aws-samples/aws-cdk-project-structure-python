@@ -1,0 +1,32 @@
+{
+  "version": "2.0",
+  "app_name": "API",
+  "stages": {
+    "UserManagementBackend-Dev/Stateless/API": {
+      "api_gateway_stage": "v1",
+      "lambda_functions": {
+        "api_handler": {
+          "manage_iam_role": false,
+          "iam_role_arn": "${Token[TOKEN.95]}",
+          "environment_variables": {
+            "TABLE_NAME": "${Token[TOKEN.86]}"
+          },
+          "reserved_concurrency": 1
+        }
+      }
+    },
+    "UserManagementBackend-Pipeline/UserManagementBackend-Prod/Stateless/API": {
+      "api_gateway_stage": "v1",
+      "lambda_functions": {
+        "api_handler": {
+          "manage_iam_role": false,
+          "iam_role_arn": "${Token[TOKEN.142]}",
+          "environment_variables": {
+            "TABLE_NAME": "${Token[TOKEN.133]}"
+          },
+          "reserved_concurrency": 10
+        }
+      }
+    }
+  }
+}

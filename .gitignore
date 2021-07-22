@@ -1,0 +1,36 @@
+# AWS CDK
+cdk.out/
+
+# AWS Chalice
+chalice.out/
+api/runtime/.chalice/deployed/
+api/runtime/.chalice/deployments/
+
+# Byte-compiled / optimized / DLL
+__pycache__/
+*.py[cod]
+*$py.class
+
+# C extensions
+*.so
+
+# Coverage.py
+.coverage
+coverage.xml
+htmlcov/
+
+# Environment
+.venv/
+node_modules/
+
+# macOS
+.DS_Store
+
+# mypy
+.mypy_cache/
+
+# PyCharm
+.idea/
+
+# pyenv
+.python-version
