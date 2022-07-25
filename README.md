@@ -32,7 +32,7 @@ cd aws-cdk-project-structure-python
 python3.7 -m venv .venv
 source .venv/bin/activate
 # [Optional] Needed to upgrade dependencies and cleanup unused packages
-pip install pip-tools==6.1.0
+pip install pip-tools==6.8.0
 ./scripts/install-deps.sh
 ./scripts/run-tests.sh
 ```

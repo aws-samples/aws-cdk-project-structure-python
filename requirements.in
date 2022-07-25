@@ -1,4 +1,4 @@
 -c api/runtime/requirements.txt
 aws-cdk-lib
-cdk-chalice
+chalice[cdkv2]
 constructs

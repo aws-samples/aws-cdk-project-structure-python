@@ -17,7 +17,7 @@ import pathlib
 from typing import Any, Dict
 
 import aws_cdk as cdk
-import cdk_chalice
+import chalice.cdk
 from aws_cdk import aws_dynamodb as dynamodb
 from aws_cdk import aws_iam as iam
 from constructs import Construct
@@ -52,7 +52,7 @@ class API(Construct):
             handler_role, dynamodb_table, lambda_reserved_concurrency
         )
         source_dir = pathlib.Path(__file__).resolve().parent.joinpath("runtime")
-        self.chalice = cdk_chalice.Chalice(
+        self.chalice = chalice.cdk.Chalice(
             self,
             "Chalice",
             source_dir=str(source_dir),
