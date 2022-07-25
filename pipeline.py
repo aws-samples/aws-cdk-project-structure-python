@@ -65,7 +65,7 @@ class Pipeline(cdk.Stack):
         package_json_path = (
             pathlib.Path(__file__).resolve().parent.joinpath("package.json")
         )
-        with open(package_json_path) as package_json_file:
+        with open(package_json_path, encoding="utf-8") as package_json_file:
             package_json = json.load(package_json_file)
         cdk_cli_version = str(package_json["devDependencies"]["aws-cdk"])
         return cdk_cli_version
