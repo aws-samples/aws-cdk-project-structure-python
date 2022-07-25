@@ -17,16 +17,17 @@ import json
 import pathlib
 from typing import Any
 
+import aws_cdk as cdk
 from aws_cdk import aws_codebuild as codebuild
-from aws_cdk import core as cdk
 from aws_cdk import pipelines
+from constructs import Construct
 
 import constants
 from deployment import UserManagementBackend
 
 
 class Pipeline(cdk.Stack):
-    def __init__(self, scope: cdk.Construct, id_: str, **kwargs: Any):
+    def __init__(self, scope: Construct, id_: str, **kwargs: Any):
         super().__init__(scope, id_, **kwargs)
 
         codepipeline_source = pipelines.CodePipelineSource.connection(
@@ -64,7 +65,7 @@ class Pipeline(cdk.Stack):
         package_json_path = (
             pathlib.Path(__file__).resolve().parent.joinpath("package.json")
         )
-        with open(package_json_path) as package_json_file:
+        with open(package_json_path, encoding="utf-8") as package_json_file:
             package_json = json.load(package_json_file)
         cdk_cli_version = str(package_json["devDependencies"]["aws-cdk"])
         return cdk_cli_version

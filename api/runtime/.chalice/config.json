@@ -7,9 +7,9 @@
       "lambda_functions": {
         "api_handler": {
           "manage_iam_role": false,
-          "iam_role_arn": "${Token[TOKEN.95]}",
+          "iam_role_arn": "${Token[TOKEN.221]}",
           "environment_variables": {
-            "TABLE_NAME": "${Token[TOKEN.86]}"
+            "TABLE_NAME": "${Token[TOKEN.213]}"
           },
           "reserved_concurrency": 1
         }
@@ -20,9 +20,9 @@
       "lambda_functions": {
         "api_handler": {
           "manage_iam_role": false,
-          "iam_role_arn": "${Token[TOKEN.142]}",
+          "iam_role_arn": "${Token[TOKEN.269]}",
           "environment_variables": {
-            "TABLE_NAME": "${Token[TOKEN.133]}"
+            "TABLE_NAME": "${Token[TOKEN.261]}"
           },
           "reserved_concurrency": 10
         }
