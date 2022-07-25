@@ -17,16 +17,17 @@ import json
 import pathlib
 from typing import Any
 
+import aws_cdk as cdk
 from aws_cdk import aws_codebuild as codebuild
-from aws_cdk import core as cdk
 from aws_cdk import pipelines
+from constructs import Construct
 
 import constants
 from deployment import UserManagementBackend
 
 
 class Pipeline(cdk.Stack):
-    def __init__(self, scope: cdk.Construct, id_: str, **kwargs: Any):
+    def __init__(self, scope: Construct, id_: str, **kwargs: Any):
         super().__init__(scope, id_, **kwargs)
 
         codepipeline_source = pipelines.CodePipelineSource.connection(

@@ -15,8 +15,8 @@
 
 import os
 
+import aws_cdk as cdk
 from aws_cdk import aws_dynamodb as dynamodb
-from aws_cdk import core as cdk
 
 CDK_APP_NAME = "UserManagementBackend"
 CDK_APP_PYTHON_VERSION = "3.7"

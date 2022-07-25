@@ -16,16 +16,17 @@
 import pathlib
 from typing import Any, Dict
 
+import aws_cdk as cdk
 import cdk_chalice
 from aws_cdk import aws_dynamodb as dynamodb
 from aws_cdk import aws_iam as iam
-from aws_cdk import core as cdk
+from constructs import Construct
 
 
-class API(cdk.Construct):
+class API(Construct):
     def __init__(
         self,
-        scope: cdk.Construct,
+        scope: Construct,
         id_: str,
         *,
         dynamodb_table: dynamodb.Table,

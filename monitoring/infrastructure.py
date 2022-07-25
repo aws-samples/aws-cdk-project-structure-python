@@ -13,16 +13,17 @@
 # IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 # CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
+import aws_cdk as cdk
 from aws_cdk import aws_cloudwatch as cloudwatch
 from aws_cdk import aws_sam as sam
-from aws_cdk import core as cdk
+from constructs import Construct
 
 from api.infrastructure import API
 from database.infrastructure import Database
 
 
-class Monitoring(cdk.Construct):
-    def __init__(self, scope: cdk.Construct, id_: str, *, database: Database, api: API):
+class Monitoring(Construct):
+    def __init__(self, scope: Construct, id_: str, *, database: Database, api: API):
         super().__init__(scope, id_)
 
         apigateway: sam.CfnApi = api.chalice.sam_template.get_resource("RestAPI")
