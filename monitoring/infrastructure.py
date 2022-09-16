@@ -25,17 +25,17 @@ class Monitoring(cdk.Construct):
     def __init__(self, scope: cdk.Construct, id_: str, *, database: Database, api: API):
         super().__init__(scope, id_)
 
-        apigateway: sam.CfnApi = api.chalice.sam_template.get_resource("RestAPI")
+        apigateway: sam.CfnApi = api.rest_api
         apigateway_metric_dimensions = {"ApiName": cdk.Fn.ref(apigateway.logical_id)}
         apigateway_metric_count = cloudwatch.Metric(
             namespace="AWS/APIGateway",
             metric_name="Count",
-            dimensions=apigateway_metric_dimensions,
+            dimensions_map=apigateway_metric_dimensions,
         )
         widgets = [
             cloudwatch.SingleValueWidget(metrics=[apigateway_metric_count]),
             cloudwatch.SingleValueWidget(
-                metrics=[database.table.metric_consumed_read_capacity_units()]
+                metrics=[database.dynamodb_table.metric_consumed_read_capacity_units()]
             ),
         ]
-        cloudwatch.Dashboard(self, "Dashboard", widgets=[widgets])
+        cloudwatch.Dashboard(self, "CloudWatchDashboard", widgets=[widgets])

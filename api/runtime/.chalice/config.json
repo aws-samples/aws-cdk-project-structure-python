@@ -2,27 +2,27 @@
   "version": "2.0",
   "app_name": "API",
   "stages": {
-    "UserManagementBackend-Dev/Stateless/API": {
+    "UserManagementBackendSandbox/API": {
       "api_gateway_stage": "v1",
       "lambda_functions": {
         "api_handler": {
           "manage_iam_role": false,
-          "iam_role_arn": "${Token[TOKEN.95]}",
+          "iam_role_arn": "${Token[TOKEN.208]}",
           "environment_variables": {
-            "TABLE_NAME": "${Token[TOKEN.86]}"
+            "DYNAMODB_TABLE_NAME": "${Token[TOKEN.200]}"
           },
           "reserved_concurrency": 1
         }
       }
     },
-    "UserManagementBackend-Pipeline/UserManagementBackend-Prod/Stateless/API": {
+    "UserManagementBackendToolchain/Pipeline/Production/UserManagementBackend/API": {
       "api_gateway_stage": "v1",
       "lambda_functions": {
         "api_handler": {
           "manage_iam_role": false,
-          "iam_role_arn": "${Token[TOKEN.142]}",
+          "iam_role_arn": "${Token[TOKEN.256]}",
           "environment_variables": {
-            "TABLE_NAME": "${Token[TOKEN.133]}"
+            "DYNAMODB_TABLE_NAME": "${Token[TOKEN.248]}"
           },
           "reserved_concurrency": 10
         }

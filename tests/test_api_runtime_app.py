@@ -22,7 +22,9 @@ from api.runtime.app import app  # type: ignore
 
 
 class AppTestCase(unittest.TestCase):
-    @mock.patch.dict("chalicelib.helpers.os.environ", {"TABLE_NAME": "AppTestCase"})
+    @mock.patch.dict(
+        "chalicelib.helpers.os.environ", {"DYNAMODB_TABLE_NAME": "AppTestCase"}
+    )
     @mock.patch("chalicelib.users.DynamoDBDatabase.get_user")
     def test_get_user_exists(self, mock_get_user: mock.Mock) -> None:
         username = "john"

@@ -3,7 +3,7 @@ The project implements a *user management backend* component that uses
 Amazon API Gateway, AWS Lambda and Amazon DynamoDB to provide basic CRUD operations 
 for managing users. The project also includes a continuous deployment pipeline.
 
-![diagram](https://user-images.githubusercontent.com/4362270/128627707-fe646837-7c5d-403e-828e-33142383d121.png)
+![diagram](https://user-images.githubusercontent.com/4362270/190571364-50987a50-1168-4ff2-95e5-61d9bd680d6e.png)
 \* Diagram generated using https://github.com/pistazie/cdk-dia
 
 ## Create a new repository from aws-cdk-project-structure-python
@@ -31,8 +31,13 @@ cd aws-cdk-project-structure-python
 ```bash
 python3.7 -m venv .venv
 source .venv/bin/activate
+
 # [Optional] Needed to upgrade dependencies and cleanup unused packages
-pip install pip-tools==6.1.0
+# Pinning pip-tools to 6.4.0 and pip to 21.3.1 due to
+# https://github.com/jazzband/pip-tools/issues/1576
+pip install pip-tools==6.4.0
+pip install pip==21.3.1
+
 ./scripts/install-deps.sh
 ./scripts/run-tests.sh
 ```
@@ -62,52 +67,45 @@ pip-sync api/runtime/requirements.txt requirements.txt requirements-dev.txt
 ./scripts/run-tests.sh
 ```
 
-## Deploy the component to development environment
-The `UserManagementBackend-Dev` stage uses your default AWS account and region.
-It consists of two stacks - stateful (database) and stateless (API and monitoring) 
+## Deploy the component to sandbox environment
+The `UserManagementBackendSandbox` stack uses your default AWS account and region.
 
 ```bash
-npx cdk deploy "UserManagementBackend-Dev/*"
+npx cdk deploy UserManagementBackendSandbox
 ```
 
-Example outputs for `npx cdk deploy "UserManagementBackend-Dev/*"`:
+Example outputs for `npx cdk deploy UserManagementBackendSandbox`:
 ```text
- ✅  UserManagementBackendDevStateful7B33C11B (UserManagementBackend-Dev-Stateful)
+ ✅  UserManagementBackendSandbox
 
 Outputs:
-UserManagementBackendDevStateful7B33C11B.ExportsOutputFnGetAttDatabaseTableF104A135ArnDAC15A6A = arn:aws:dynamodb:eu-west-1:111111111111:table/UserManagementBackend-Dev-Stateful-DatabaseTableF104A135-1LVXRPCPOKVZQ
-UserManagementBackendDevStateful7B33C11B.ExportsOutputRefDatabaseTableF104A1356B7D7D8A = UserManagementBackend-Dev-Stateful-DatabaseTableF104A135-1LVXRPCPOKVZQ
-```
-```text
- ✅  UserManagementBackendDevStateless0E5B7E4B (UserManagementBackend-Dev-Stateless)
-
-Outputs:
-UserManagementBackendDevStateless0E5B7E4B.APIHandlerArn = arn:aws:lambda:eu-west-1:111111111111:function:UserManagementBackend-Dev-Stateless-APIHandler-PJjw0Jn7Waq0
-UserManagementBackendDevStateless0E5B7E4B.APIHandlerName = UserManagementBackend-Dev-Stateless-APIHandler-PJjw0Jn7Waq0
-UserManagementBackendDevStateless0E5B7E4B.EndpointURL = https://zx5s6bum21.execute-api.eu-west-1.amazonaws.com/v1/
-UserManagementBackendDevStateless0E5B7E4B.RestAPIId = zx5s6bum21
+UserManagementBackendSandbox.APIHandlerArn = arn:aws:lambda:eu-west-1:123456789012:function:UserManagementBackendSandbox-APIHandler-C9PR5KQGMbpk
+UserManagementBackendSandbox.APIHandlerName = UserManagementBackendSandbox-APIHandler-C9PR5KQGMbpk
+UserManagementBackendSandbox.EndpointURL = https://gtvk7d9k8h.execute-api.eu-west-1.amazonaws.com/v1/
+UserManagementBackendSandbox.RestAPIId = gtvk7d9k8h
 ```
 
-## Deploy the pipeline
+## Deploy the toolchain
 **Prerequisites**
 - Create a new repository from aws-cdk-project-structure-python, if you haven't done 
   this already. See [Create a new repository from aws-cdk-project-structure-python](README.md#create-a-new-repository-from-aws-cdk-project-structure-python)
   for instructions
 - Create AWS CodeStar Connections [connection](https://docs.aws.amazon.com/dtconsole/latest/userguide/welcome-connections.html)
   for the pipeline
-- Update the values in [constants.py](constants.py)
-- Commit and push the changes: `git commit -a -m 'Update constants' && git push`
+- Update the toolchain account in [app.py](app.py) 
+- Update the toolchain constants in [toolchain.py](toolchain.py)
+- Commit and push the changes: `git commit -a -m 'Update toolchain account and constants' && git push`
 
 ```bash
-npx cdk deploy UserManagementBackend-Pipeline
+npx cdk deploy UserManagementBackendToolchain
 ```
 
 ## Delete all stacks
 **Do not forget to delete the stacks to avoid unexpected charges**
 ```bash
-npx cdk destroy "UserManagementBackend-Dev/*"
-npx cdk destroy UserManagementBackend-Pipeline
-npx cdk destroy "UserManagementBackend-Pipeline/UserManagementBackend-Prod/*"
+npx cdk destroy UserManagementBackendSandbox
+npx cdk destroy UserManagementBackendToolchain
+npx cdk destroy UserManagementBackendToolchain/Pipeline/Production/UserManagementBackend
 ```
 
 Delete the AWS CodeStar Connections connection if it is no longer needed. Follow the instructions
@@ -118,7 +116,7 @@ Below are examples that show the available resources and how to use them:
 
 ```bash
 endpoint_url=$(aws cloudformation describe-stacks \
-  --stack-name UserManagementBackend-Dev-Stateless \
+  --stack-name UserManagementBackendSandbox \
   --query 'Stacks[*].Outputs[?OutputKey==`EndpointURL`].OutputValue' \
   --output text)
 

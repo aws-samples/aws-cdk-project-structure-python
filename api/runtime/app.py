@@ -21,7 +21,7 @@ app = chalice.Chalice(app_name="API")
 
 @app.route("/users", methods=["POST"])
 def create_user() -> chalice.Response:
-    user_attributes = app.current_request.json_body
+    user_attributes = app.current_request.json_body  # type: ignore
     username = user_attributes["username"]
     del user_attributes["username"]
 
@@ -36,7 +36,7 @@ def create_user() -> chalice.Response:
 
 @app.route("/users/{username}", methods=["PUT"])
 def update_user(username: str) -> chalice.Response:
-    user_attributes = app.current_request.json_body
+    user_attributes = app.current_request.json_body  # type: ignore
     users_repository = helpers.init_users_repository()
     updated_user = users_repository.update_user(username, user_attributes)
     return chalice.Response(updated_user)

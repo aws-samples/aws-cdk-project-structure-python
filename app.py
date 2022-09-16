@@ -13,24 +13,34 @@
 # IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 # CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
+import os
+
+from aws_cdk import aws_dynamodb as dynamodb
 from aws_cdk import core as cdk
 
 import constants
-from deployment import UserManagementBackend
-from pipeline import Pipeline
+from component import UserManagementBackend
+from toolchain import UserManagementBackendToolchain
 
 app = cdk.App()
 
-# Development
+# Component sandbox stack
 UserManagementBackend(
     app,
-    f"{constants.CDK_APP_NAME}-Dev",
-    env=constants.DEV_ENV,
-    api_lambda_reserved_concurrency=constants.DEV_API_LAMBDA_RESERVED_CONCURRENCY,
-    database_dynamodb_billing_mode=constants.DEV_DATABASE_DYNAMODB_BILLING_MODE,
+    constants.APP_NAME + "Sandbox",
+    env=cdk.Environment(
+        account=os.environ["CDK_DEFAULT_ACCOUNT"],
+        region=os.environ["CDK_DEFAULT_REGION"],
+    ),
+    api_lambda_reserved_concurrency=1,
+    database_dynamodb_billing_mode=dynamodb.BillingMode.PAY_PER_REQUEST,
 )
 
-# Production pipeline
-Pipeline(app, f"{constants.CDK_APP_NAME}-Pipeline", env=constants.PIPELINE_ENV)
+# Component toolchain stack (continuous deployment pipeline)
+UserManagementBackendToolchain(
+    app,
+    constants.APP_NAME + "Toolchain",
+    env=cdk.Environment(account="111111111111", region="eu-west-1"),
+)
 
 app.synth()

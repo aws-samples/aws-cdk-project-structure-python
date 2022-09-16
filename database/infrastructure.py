@@ -30,9 +30,9 @@ class Database(cdk.Construct):
         partition_key = dynamodb.Attribute(
             name="username", type=dynamodb.AttributeType.STRING
         )
-        self.table = dynamodb.Table(
+        self.dynamodb_table = dynamodb.Table(
             self,
-            "Table",
+            "DynamoDBTable",
             billing_mode=dynamodb_billing_mode,
             partition_key=partition_key,
             removal_policy=cdk.RemovalPolicy.DESTROY,

@@ -38,7 +38,7 @@ class APITestCase(unittest.TestCase):
             API(
                 stack,
                 "API",
-                dynamodb_table=database.table,
+                dynamodb_table_name=database.dynamodb_table.table_name,
                 lambda_reserved_concurrency=1,
             )
             cloud_assembly = app.synth()
