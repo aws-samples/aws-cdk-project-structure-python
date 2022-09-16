@@ -13,9 +13,7 @@
 # IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 # CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-import aws_cdk as cdk
-from aws_cdk import aws_cloudwatch as cloudwatch
-from aws_cdk import aws_sam as sam
+import aws_cdk.aws_cloudwatch as cloudwatch
 from constructs import Construct
 
 from api.infrastructure import API
@@ -26,15 +24,10 @@ class Monitoring(Construct):
     def __init__(self, scope: Construct, id_: str, *, database: Database, api: API):
         super().__init__(scope, id_)
 
-        apigateway: sam.CfnApi = api.rest_api
-        apigateway_metric_dimensions = {"ApiName": cdk.Fn.ref(apigateway.logical_id)}
-        apigateway_metric_count = cloudwatch.Metric(
-            namespace="AWS/APIGateway",
-            metric_name="Count",
-            dimensions_map=apigateway_metric_dimensions,
-        )
         widgets = [
-            cloudwatch.SingleValueWidget(metrics=[apigateway_metric_count]),
+            cloudwatch.SingleValueWidget(
+                metrics=[api.api_gateway_http_api.metric_count()]
+            ),
             cloudwatch.SingleValueWidget(
                 metrics=[database.dynamodb_table.metric_consumed_read_capacity_units()]
             ),

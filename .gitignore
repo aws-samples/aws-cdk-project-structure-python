@@ -1,11 +1,6 @@
 # AWS CDK
 cdk.out/
 
-# AWS Chalice
-chalice.out/
-api/runtime/.chalice/deployed/
-api/runtime/.chalice/deployments/
-
 # Byte-compiled / optimized / DLL
 __pycache__/
 *.py[cod]

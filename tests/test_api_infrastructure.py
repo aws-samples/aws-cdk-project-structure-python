@@ -13,59 +13,36 @@
 # IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 # CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-import json
-import pathlib
-import tempfile
 import unittest
 
 import aws_cdk as cdk
-from aws_cdk import aws_dynamodb as dynamodb
+import aws_cdk.aws_dynamodb as dynamodb
+from aws_cdk import assertions
 
 from api.infrastructure import API
 from database.infrastructure import Database
 
 
 class APITestCase(unittest.TestCase):
-    def test_endpoint_url_output_exists(self) -> None:
-        with tempfile.TemporaryDirectory() as temp_dir:
-            app = cdk.App(outdir=temp_dir)
-            stack = cdk.Stack(app, "Stack")
-            database = Database(
-                stack,
-                "Database",
-                dynamodb_billing_mode=dynamodb.BillingMode.PAY_PER_REQUEST,
-            )
-            API(
-                stack,
-                "API",
-                dynamodb_table_name=database.dynamodb_table.table_name,
-                lambda_reserved_concurrency=1,
-            )
-            cloud_assembly = app.synth()
-            template = cloud_assembly.get_stack_by_name(stack.stack_name).template
-        self.assertEqual(
-            template["Outputs"]["EndpointURL"]["Value"]["Fn::Sub"],
-            "https://${RestAPI}.execute-api.${AWS::Region}.${AWS::URLSuffix}/v1/",
+    def test_lambda_function_bundling(self) -> None:
+        stack = cdk.Stack()
+        database = Database(
+            stack,
+            "Database",
+            dynamodb_billing_mode=dynamodb.BillingMode.PAY_PER_REQUEST,
         )
-        self._cleanup_chalice_config_file(f"{stack.stack_name}/API")
-
-    @staticmethod
-    def _cleanup_chalice_config_file(stage_name: str) -> None:
-        chalice_config_path = (
-            pathlib.Path(__file__)
-            .resolve()
-            .parent.parent.joinpath("api/runtime/.chalice/config.json")
+        API(
+            stack,
+            "API",
+            dynamodb_table_name=database.dynamodb_table.table_name,
+            lambda_reserved_concurrency=1,
         )
-        with pathlib.Path.open(chalice_config_path, "r+") as chalice_config_file:
-            chalice_config = json.load(chalice_config_file)
-            try:
-                del chalice_config["stages"][stage_name]
-            except KeyError:
-                return
-            else:
-                chalice_config_file.seek(0)
-                chalice_config_file.truncate()
-                json.dump(chalice_config, chalice_config_file, indent=2)
+        template = assertions.Template.from_stack(stack).to_json()
+        lambda_function_code_property = template["Resources"][
+            "APILambdaFunction0BD6F5C6"
+        ]["Properties"]["Code"]
+        self.assertIn("S3Bucket", lambda_function_code_property)
+        self.assertIn("S3Key", lambda_function_code_property)
 
 
 if __name__ == "__main__":

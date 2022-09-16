@@ -16,7 +16,7 @@
 from typing import Any
 
 import aws_cdk as cdk
-from aws_cdk import aws_dynamodb as dynamodb
+import aws_cdk.aws_dynamodb as dynamodb
 from constructs import Construct
 
 from api.infrastructure import API
@@ -49,6 +49,11 @@ class UserManagementBackend(cdk.Stack):
         )
         Monitoring(self, "Monitoring", database=database, api=api)
 
-        database.dynamodb_table.grant_read_write_data(api.handler_role)
+        database.dynamodb_table.grant_read_write_data(api.lambda_function)
 
-        self.api_endpoint: cdk.CfnOutput = api.endpoint_url
+        self.api_endpoint = cdk.CfnOutput(
+            self,
+            "APIEndpoint",
+            # API doesn't disable create_default_stage, hence URL will be defined
+            value=api.api_gateway_http_api.url,  # type: ignore
+        )

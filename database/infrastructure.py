@@ -14,17 +14,13 @@
 # CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 import aws_cdk as cdk
-from aws_cdk import aws_dynamodb as dynamodb
+import aws_cdk.aws_dynamodb as dynamodb
 from constructs import Construct
 
 
 class Database(Construct):
     def __init__(
-        self,
-        scope: Construct,
-        id_: str,
-        *,
-        dynamodb_billing_mode: dynamodb.BillingMode,
+        self, scope: Construct, id_: str, *, dynamodb_billing_mode: dynamodb.BillingMode
     ):
         super().__init__(scope, id_)
 

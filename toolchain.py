@@ -17,10 +17,11 @@ import json
 import pathlib
 from typing import Any
 
-from aws_cdk import aws_codebuild as codebuild
-from aws_cdk import aws_dynamodb as dynamodb
-from aws_cdk import core as cdk
+import aws_cdk as cdk
+import aws_cdk.aws_codebuild as codebuild
+import aws_cdk.aws_dynamodb as dynamodb
 from aws_cdk import pipelines
+from constructs import Construct
 
 import constants
 from component import UserManagementBackend
@@ -35,7 +36,7 @@ PRODUCTION_ENV_REGION = "eu-west-1"
 
 
 class UserManagementBackendToolchain(cdk.Stack):
-    def __init__(self, scope: cdk.Construct, id_: str, **kwargs: Any):
+    def __init__(self, scope: Construct, id_: str, **kwargs: Any):
         super().__init__(scope, id_, **kwargs)
 
         source = pipelines.CodePipelineSource.connection(
@@ -57,6 +58,8 @@ class UserManagementBackendToolchain(cdk.Stack):
             "Pipeline",
             cli_version=UserManagementBackendToolchain._get_cdk_cli_version(),
             cross_account_keys=True,
+            docker_enabled_for_synth=True,
+            publish_assets_in_parallel=False,
             synth=synth,
         )
         UserManagementBackendToolchain._add_production_stage(pipeline)
@@ -64,7 +67,7 @@ class UserManagementBackendToolchain(cdk.Stack):
     @staticmethod
     def _get_cdk_cli_version() -> str:
         package_json_path = (
-            pathlib.Path(__file__).resolve().parent.joinpath("package.json")
+            pathlib.Path(__file__).parent.joinpath("package.json").resolve()
         )
         with open(package_json_path, encoding="utf_8") as package_json_file:
             package_json = json.load(package_json_file)
@@ -73,7 +76,7 @@ class UserManagementBackendToolchain(cdk.Stack):
 
     @staticmethod
     def _add_production_stage(pipeline: pipelines.CodePipeline) -> None:
-        stage = cdk.Stage(
+        production = cdk.Stage(
             pipeline,
             PRODUCTION_ENV_NAME,
             env=cdk.Environment(
@@ -81,8 +84,8 @@ class UserManagementBackendToolchain(cdk.Stack):
             ),
         )
         usermanagement_backend = UserManagementBackend(
-            stage,
-            constants.APP_NAME,
+            production,
+            constants.APP_NAME + PRODUCTION_ENV_NAME,
             stack_name=constants.APP_NAME + PRODUCTION_ENV_NAME,
             api_lambda_reserved_concurrency=10,
             database_dynamodb_billing_mode=dynamodb.BillingMode.PROVISIONED,
@@ -96,4 +99,4 @@ class UserManagementBackendToolchain(cdk.Stack):
             },
             commands=smoke_test_commands,
         )
-        pipeline.add_stage(stage, post=[smoke_test])
+        pipeline.add_stage(production, post=[smoke_test])

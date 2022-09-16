@@ -14,13 +14,11 @@
 # CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 import pathlib
-from typing import Any, Dict
 
-import aws_cdk as cdk
-import chalice.cdk
-from aws_cdk import aws_dynamodb as dynamodb
-from aws_cdk import aws_iam as iam
-from aws_cdk import aws_sam as sam
+import aws_cdk.aws_apigatewayv2_alpha as apigatewayv2_alpha
+import aws_cdk.aws_apigatewayv2_integrations_alpha as apigatewayv2_integrations_alpha
+import aws_cdk.aws_lambda as lambda_
+import aws_cdk.aws_lambda_python_alpha as lambda_python_alpha
 from constructs import Construct
 
 
@@ -35,49 +33,24 @@ class API(Construct):
     ):
         super().__init__(scope, id_)
 
-        service_principal = iam.ServicePrincipal("lambda.amazonaws.com")
-        # This policy is used for writing to Amazon CloudWatch Logs
-        policy = iam.ManagedPolicy.from_aws_managed_policy_name(
-            "service-role/AWSLambdaBasicExecutionRole"
-        )
-        self.handler_role = iam.Role(
+        self.lambda_function = lambda_python_alpha.PythonFunction(
             self,
-            "HandlerRole",
-            assumed_by=service_principal,
-            managed_policies=[policy],
-        )
-        stage_config = API._create_chalice_stage_config(
-            self.handler_role, dynamodb_table_name, lambda_reserved_concurrency
-        )
-        source_dir = pathlib.Path(__file__).resolve().parent.joinpath("runtime")
-        chalice = chalice.cdk.Chalice(
-            self,
-            "Chalice",
-            source_dir=str(source_dir),
-            stage_config=stage_config,
-        )
-        self.rest_api: sam.CfnApi = chalice.get_resource("RestAPI")
-        self.endpoint_url: cdk.CfnOutput = chalice.get_output(
-            "EndpointURL"
+            "LambdaFunction",
+            runtime=lambda_.Runtime.PYTHON_3_7,
+            environment={"DYNAMODB_TABLE_NAME": dynamodb_table_name},
+            reserved_concurrent_executions=lambda_reserved_concurrency,
+            entry=str(pathlib.Path(__file__).parent.joinpath("runtime").resolve()),
+            index="lambda_function.py",
+            handler="lambda_handler",
         )
 
-    @staticmethod
-    def _create_chalice_stage_config(
-        handler_role: iam.Role,
-        dynamodb_table_name: str,
-        lambda_reserved_concurrency: int,
-    ) -> Dict[str, Any]:
-        chalice_stage_config = {
-            "api_gateway_stage": "v1",
-            "lambda_functions": {
-                "api_handler": {
-                    "manage_iam_role": False,
-                    "iam_role_arn": handler_role.role_arn,
-                    "environment_variables": {
-                        "DYNAMODB_TABLE_NAME": dynamodb_table_name
-                    },
-                    "reserved_concurrency": lambda_reserved_concurrency,
-                }
-            },
-        }
-        return chalice_stage_config
+        api_gateway_http_lambda_integration = (
+            apigatewayv2_integrations_alpha.HttpLambdaIntegration(
+                "APIGatewayHTTPLambdaIntegration", handler=self.lambda_function
+            )
+        )
+        self.api_gateway_http_api = apigatewayv2_alpha.HttpApi(
+            self,
+            "APIGatewayHTTPAPI",
+            default_integration=api_gateway_http_lambda_integration,
+        )

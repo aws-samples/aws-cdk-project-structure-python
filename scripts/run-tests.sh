@@ -33,17 +33,13 @@ flake8 --config .flake8 "${targets[@]}"
 isort --settings-path .isort.cfg --check --diff "${targets[@]}"
 
 # Static type checker (https://mypy.readthedocs.io)
-# Split commands due to https://github.com/python/mypy/issues/4008
-mypy --config-file .mypy.ini "${targets[@]:0:4}"
-mypy --config-file .mypy.ini "${targets[@]:4}"
+mypy --config-file .mypy.ini "${targets[@]}"
 
 # Check for errors, enforce a coding standard, look for code smells (http://pylint.pycqa.org)
 pylint --rcfile .pylintrc "${targets[@]}"
 
 # Check dependencies for security issues (https://pyup.io/safety)
-# Ignore coverage 5.5 (41002) report, no issues per Snyk: https://snyk.io/vuln/pip:coverage@5.5
 safety check \
-  -i 41002 \
   -r api/runtime/requirements.txt \
   -r requirements.txt \
   -r requirements-dev.txt

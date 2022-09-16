@@ -15,7 +15,7 @@
 
 import os
 
-from chalicelib import users
+import users
 
 
 def init_users_repository() -> users.UsersRepository:

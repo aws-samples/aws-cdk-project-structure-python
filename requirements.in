@@ -1,4 +1,6 @@
 -c api/runtime/requirements.txt
 aws-cdk-lib
-chalice[cdkv2]
+aws-cdk.aws-apigatewayv2-alpha
+aws-cdk.aws-apigatewayv2-integrations-alpha
+aws-cdk.aws-lambda-python-alpha
 constructs

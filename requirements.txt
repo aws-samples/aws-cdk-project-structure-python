@@ -4,111 +4,67 @@
 #
 #    pip-compile requirements.in
 #
-attrs==21.4.0
+attrs==22.1.0
     # via
-    #   -c api/runtime/requirements.txt
     #   cattrs
-    #   chalice
     #   jsii
-aws-cdk-lib==2.33.0
+aws-cdk-lib==2.42.0
     # via
     #   -r requirements.in
-    #   chalice
-blessed==1.19.1
+    #   aws-cdk.aws-apigatewayv2-alpha
+    #   aws-cdk.aws-apigatewayv2-integrations-alpha
+    #   aws-cdk.aws-lambda-python-alpha
+aws-cdk.aws-apigatewayv2-alpha==2.42.0.a0
     # via
-    #   -c api/runtime/requirements.txt
-    #   inquirer
-botocore==1.27.37
-    # via
-    #   -c api/runtime/requirements.txt
-    #   chalice
+    #   -r requirements.in
+    #   aws-cdk.aws-apigatewayv2-integrations-alpha
+aws-cdk.aws-apigatewayv2-integrations-alpha==2.42.0a0
+    # via -r requirements.in
+aws-cdk.aws-lambda-python-alpha==2.42.0a0
+    # via -r requirements.in
 cattrs==22.1.0
     # via jsii
-chalice[cdkv2]==1.27.1
-    # via
-    #   -c api/runtime/requirements.txt
-    #   -r requirements.in
-click==8.1.3
-    # via
-    #   -c api/runtime/requirements.txt
-    #   chalice
-constructs==10.1.56
+constructs==10.1.104
     # via
     #   -r requirements.in
     #   aws-cdk-lib
-exceptiongroup==1.0.0rc8
+    #   aws-cdk.aws-apigatewayv2-alpha
+    #   aws-cdk.aws-apigatewayv2-integrations-alpha
+    #   aws-cdk.aws-lambda-python-alpha
+exceptiongroup==1.0.0rc9
     # via cattrs
-importlib-metadata==4.12.0
-    # via
-    #   -c api/runtime/requirements.txt
-    #   click
-inquirer==2.9.2
-    # via
-    #   -c api/runtime/requirements.txt
-    #   chalice
-jmespath==1.0.1
-    # via
-    #   -c api/runtime/requirements.txt
-    #   botocore
-    #   chalice
-jsii==1.62.0
+jsii==1.67.0
     # via
     #   aws-cdk-lib
+    #   aws-cdk.aws-apigatewayv2-alpha
+    #   aws-cdk.aws-apigatewayv2-integrations-alpha
+    #   aws-cdk.aws-lambda-python-alpha
     #   constructs
-mypy-extensions==0.4.3
-    # via
-    #   -c api/runtime/requirements.txt
-    #   chalice
 publication==0.0.3
     # via
     #   aws-cdk-lib
+    #   aws-cdk.aws-apigatewayv2-alpha
+    #   aws-cdk.aws-apigatewayv2-integrations-alpha
+    #   aws-cdk.aws-lambda-python-alpha
     #   constructs
+    #   jsii
 python-dateutil==2.8.2
     # via
     #   -c api/runtime/requirements.txt
-    #   botocore
     #   jsii
-python-editor==1.0.4
-    # via
-    #   -c api/runtime/requirements.txt
-    #   inquirer
-pyyaml==6.0
-    # via
-    #   -c api/runtime/requirements.txt
-    #   chalice
-readchar==3.1.0
-    # via
-    #   -c api/runtime/requirements.txt
-    #   inquirer
 six==1.16.0
     # via
     #   -c api/runtime/requirements.txt
-    #   blessed
-    #   chalice
     #   python-dateutil
+typeguard==2.13.3
+    # via
+    #   aws-cdk-lib
+    #   aws-cdk.aws-apigatewayv2-alpha
+    #   aws-cdk.aws-apigatewayv2-integrations-alpha
+    #   aws-cdk.aws-lambda-python-alpha
+    #   constructs
+    #   jsii
 typing-extensions==4.3.0
     # via
-    #   -c api/runtime/requirements.txt
     #   cattrs
-    #   importlib-metadata
     #   jsii
-urllib3==1.26.11
-    # via
-    #   -c api/runtime/requirements.txt
-    #   botocore
-wcwidth==0.2.5
-    # via
-    #   -c api/runtime/requirements.txt
-    #   blessed
-wheel==0.37.1
-    # via
-    #   -c api/runtime/requirements.txt
-    #   chalice
-zipp==3.8.1
-    # via
-    #   -c api/runtime/requirements.txt
-    #   importlib-metadata
-
-# The following packages are considered to be unsafe in a requirements file:
-# pip
-# setuptools

@@ -16,7 +16,7 @@
 import os
 
 import aws_cdk as cdk
-from aws_cdk import aws_dynamodb as dynamodb
+import aws_cdk.aws_dynamodb as dynamodb
 
 import constants
 from component import UserManagementBackend
@@ -36,7 +36,7 @@ UserManagementBackend(
     database_dynamodb_billing_mode=dynamodb.BillingMode.PAY_PER_REQUEST,
 )
 
-# Component toolchain stack (continuous deployment pipeline)
+# Component toolchain stack (defines the continuous deployment pipeline)
 UserManagementBackendToolchain(
     app,
     constants.APP_NAME + "Toolchain",
