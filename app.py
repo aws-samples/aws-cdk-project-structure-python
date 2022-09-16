@@ -15,8 +15,8 @@
 
 import os
 
+import aws_cdk as cdk
 from aws_cdk import aws_dynamodb as dynamodb
-from aws_cdk import core as cdk
 
 import constants
 from component import UserManagementBackend

@@ -16,15 +16,18 @@
 import pathlib
 from typing import Any, Dict
 
-import cdk_chalice
+import aws_cdk as cdk
+import chalice.cdk
+from aws_cdk import aws_dynamodb as dynamodb
 from aws_cdk import aws_iam as iam
-from aws_cdk import core as cdk
+from aws_cdk import aws_sam as sam
+from constructs import Construct
 
 
-class API(cdk.Construct):
+class API(Construct):
     def __init__(
         self,
-        scope: cdk.Construct,
+        scope: Construct,
         id_: str,
         *,
         dynamodb_table_name: str,
@@ -47,14 +50,14 @@ class API(cdk.Construct):
             self.handler_role, dynamodb_table_name, lambda_reserved_concurrency
         )
         source_dir = pathlib.Path(__file__).resolve().parent.joinpath("runtime")
-        chalice = cdk_chalice.Chalice(
+        chalice = chalice.cdk.Chalice(
             self,
             "Chalice",
             source_dir=str(source_dir),
             stage_config=stage_config,
         )
-        self.rest_api = chalice.sam_template.get_resource("RestAPI")
-        self.endpoint_url: cdk.CfnOutput = chalice.sam_template.get_output(
+        self.rest_api: sam.CfnApi = chalice.get_resource("RestAPI")
+        self.endpoint_url: cdk.CfnOutput = chalice.get_output(
             "EndpointURL"
         )
 

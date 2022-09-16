@@ -8,33 +8,35 @@ attrs==21.4.0
     # via chalice
 blessed==1.19.1
     # via inquirer
-boto3==1.24.74
+boto3==1.24.37
     # via -r api/runtime/requirements.in
-botocore==1.27.74
+botocore==1.27.37
     # via
     #   boto3
     #   chalice
     #   s3transfer
-chalice==1.27.3
+chalice==1.27.1
     # via -r api/runtime/requirements.in
 click==8.1.3
     # via chalice
-importlib-metadata==4.2.0
+importlib-metadata==4.12.0
     # via click
-inquirer==2.10.0
+inquirer==2.9.2
     # via chalice
 jmespath==1.0.1
     # via
     #   boto3
     #   botocore
     #   chalice
+mypy-extensions==0.4.3
+    # via chalice
 python-dateutil==2.8.2
     # via botocore
 python-editor==1.0.4
     # via inquirer
 pyyaml==6.0
     # via chalice
-readchar==4.0.3
+readchar==3.1.0
     # via inquirer
 s3transfer==0.6.0
     # via boto3
@@ -44,10 +46,8 @@ six==1.16.0
     #   chalice
     #   python-dateutil
 typing-extensions==4.3.0
-    # via
-    #   chalice
-    #   importlib-metadata
-urllib3==1.26.12
+    # via importlib-metadata
+urllib3==1.26.11
     # via botocore
 wcwidth==0.2.5
     # via blessed

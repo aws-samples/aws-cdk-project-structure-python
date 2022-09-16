@@ -18,8 +18,8 @@ import pathlib
 import tempfile
 import unittest
 
+import aws_cdk as cdk
 from aws_cdk import aws_dynamodb as dynamodb
-from aws_cdk import core as cdk
 
 from api.infrastructure import API
 from database.infrastructure import Database
