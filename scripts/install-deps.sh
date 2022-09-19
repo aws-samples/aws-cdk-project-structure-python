@@ -22,4 +22,4 @@ set -o verbose
 npm install
 
 # Install project dependencies
-pip install -r api/runtime/requirements.txt -r requirements.txt -r requirements-dev.txt
+pip install -r backend/api/runtime/requirements.txt -r requirements.txt -r requirements-dev.txt

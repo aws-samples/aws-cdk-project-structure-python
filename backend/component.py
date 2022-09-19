@@ -13,37 +13,47 @@
 # IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 # CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-import unittest
+from typing import Any
 
 import aws_cdk as cdk
 import aws_cdk.aws_dynamodb as dynamodb
-from aws_cdk import assertions
+from constructs import Construct
 
-from api.infrastructure import API
-from database.infrastructure import Database
+from backend.api.infrastructure import API
+from backend.database.infrastructure import Database
+from backend.monitoring.infrastructure import Monitoring
 
 
-class APITestCase(unittest.TestCase):
-    def test_lambda_function_bundling(self) -> None:
-        stack = cdk.Stack()
+class Backend(cdk.Stack):
+    def __init__(
+        self,
+        scope: Construct,
+        id_: str,
+        *,
+        database_dynamodb_billing_mode: dynamodb.BillingMode,
+        api_lambda_reserved_concurrency: int,
+        **kwargs: Any,
+    ):
+        super().__init__(scope, id_, **kwargs)
+
         database = Database(
-            stack,
+            self,
             "Database",
-            dynamodb_billing_mode=dynamodb.BillingMode.PAY_PER_REQUEST,
+            dynamodb_billing_mode=database_dynamodb_billing_mode,
         )
-        API(
-            stack,
+        api = API(
+            self,
             "API",
             dynamodb_table_name=database.dynamodb_table.table_name,
-            lambda_reserved_concurrency=1,
+            lambda_reserved_concurrency=api_lambda_reserved_concurrency,
         )
-        template = assertions.Template.from_stack(stack).to_json()
-        lambda_function_code_property = template["Resources"][
-            "APILambdaFunction0BD6F5C6"
-        ]["Properties"]["Code"]
-        self.assertIn("S3Bucket", lambda_function_code_property)
-        self.assertIn("S3Key", lambda_function_code_property)
+        Monitoring(self, "Monitoring", database=database, api=api)
 
+        database.dynamodb_table.grant_read_write_data(api.lambda_function)
 
-if __name__ == "__main__":
-    unittest.main()
+        self.api_endpoint = cdk.CfnOutput(
+            self,
+            "APIEndpoint",
+            # API doesn't disable create_default_stage, hence URL will be defined
+            value=api.api_gateway_http_api.url,  # type: ignore
+        )

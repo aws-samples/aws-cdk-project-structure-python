@@ -24,7 +24,7 @@ from aws_cdk import pipelines
 from constructs import Construct
 
 import constants
-from component import UserManagementBackend
+from backend.component import Backend
 
 GITHUB_CONNECTION_ARN = "CONNECTION_ARN"
 GITHUB_OWNER = "OWNER"
@@ -35,7 +35,7 @@ PRODUCTION_ENV_ACCOUNT = "222222222222"
 PRODUCTION_ENV_REGION = "eu-west-1"
 
 
-class UserManagementBackendToolchain(cdk.Stack):
+class Toolchain(cdk.Stack):
     def __init__(self, scope: Construct, id_: str, **kwargs: Any):
         super().__init__(scope, id_, **kwargs)
 
@@ -56,13 +56,13 @@ class UserManagementBackendToolchain(cdk.Stack):
         pipeline = pipelines.CodePipeline(
             self,
             "Pipeline",
-            cli_version=UserManagementBackendToolchain._get_cdk_cli_version(),
+            cli_version=Toolchain._get_cdk_cli_version(),
             cross_account_keys=True,
             docker_enabled_for_synth=True,
             publish_assets_in_parallel=False,
             synth=synth,
         )
-        UserManagementBackendToolchain._add_production_stage(pipeline)
+        Toolchain._add_production_stage(pipeline)
 
     @staticmethod
     def _get_cdk_cli_version() -> str:
@@ -83,7 +83,7 @@ class UserManagementBackendToolchain(cdk.Stack):
                 account=PRODUCTION_ENV_ACCOUNT, region=PRODUCTION_ENV_REGION
             ),
         )
-        usermanagement_backend = UserManagementBackend(
+        backend = Backend(
             production,
             constants.APP_NAME + PRODUCTION_ENV_NAME,
             stack_name=constants.APP_NAME + PRODUCTION_ENV_NAME,
@@ -94,9 +94,7 @@ class UserManagementBackendToolchain(cdk.Stack):
         smoke_test_commands = [f"curl ${api_endpoint_env_var_name}"]
         smoke_test = pipelines.ShellStep(
             "SmokeTest",
-            env_from_cfn_outputs={
-                api_endpoint_env_var_name: usermanagement_backend.api_endpoint
-            },
+            env_from_cfn_outputs={api_endpoint_env_var_name: backend.api_endpoint},
             commands=smoke_test_commands,
         )
         pipeline.add_stage(production, post=[smoke_test])

@@ -18,7 +18,7 @@
 set -o errexit
 set -o verbose
 
-targets=(api database monitoring tests app.py component.py constants.py toolchain.py)
+targets=(backend tests app.py constants.py toolchain.py)
 
 # Find common security issues (https://bandit.readthedocs.io)
 bandit --recursive "${targets[@]}"
@@ -40,7 +40,7 @@ pylint --rcfile .pylintrc "${targets[@]}"
 
 # Check dependencies for security issues (https://pyup.io/safety)
 safety check \
-  -r api/runtime/requirements.txt \
+  -r backend/api/runtime/requirements.txt \
   -r requirements.txt \
   -r requirements-dev.txt
 
@@ -51,5 +51,5 @@ radon mi "${targets[@]}"
 xenon --max-absolute A --max-modules A --max-average A "${targets[@]}"
 
 # Run tests and measure code coverage (https://coverage.readthedocs.io)
-PYTHONPATH="${PWD}/api/runtime" \
+PYTHONPATH="${PWD}/backend/api/runtime" \
   coverage run --source "${PWD}" --omit ".venv/*,tests/*" -m unittest discover -v -s tests

@@ -19,13 +19,13 @@ import aws_cdk as cdk
 import aws_cdk.aws_dynamodb as dynamodb
 
 import constants
-from component import UserManagementBackend
-from toolchain import UserManagementBackendToolchain
+from backend.component import Backend
+from toolchain import Toolchain
 
 app = cdk.App()
 
-# Component sandbox stack
-UserManagementBackend(
+# Backend sandbox environment stack
+Backend(
     app,
     constants.APP_NAME + "Sandbox",
     env=cdk.Environment(
@@ -36,8 +36,8 @@ UserManagementBackend(
     database_dynamodb_billing_mode=dynamodb.BillingMode.PAY_PER_REQUEST,
 )
 
-# Component toolchain stack (defines the continuous deployment pipeline)
-UserManagementBackendToolchain(
+# Toolchain stack (defines the continuous deployment pipeline)
+Toolchain(
     app,
     constants.APP_NAME + "Toolchain",
     env=cdk.Environment(account="111111111111", region="eu-west-1"),

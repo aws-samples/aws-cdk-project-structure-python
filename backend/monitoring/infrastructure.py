@@ -16,8 +16,8 @@
 import aws_cdk.aws_cloudwatch as cloudwatch
 from constructs import Construct
 
-from api.infrastructure import API
-from database.infrastructure import Database
+from backend.api.infrastructure import API
+from backend.database.infrastructure import Database
 
 
 class Monitoring(Construct):

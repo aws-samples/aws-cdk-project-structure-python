@@ -59,12 +59,12 @@ Consider [AWS CDK Toolkit (CLI)](https://docs.aws.amazon.com/cdk/latest/guide/re
 when upgrading AWS CDK packages version.
 
 ```bash
-pip-compile --upgrade api/runtime/requirements.in
+pip-compile --upgrade backend/api/runtime/requirements.in
 pip-compile --upgrade requirements.in
 pip-compile --upgrade requirements-dev.in
 ./scripts/install-deps.sh
 # [Optional] Cleanup unused packages
-pip-sync api/runtime/requirements.txt requirements.txt requirements-dev.txt
+pip-sync backend/api/runtime/requirements.txt requirements.txt requirements-dev.txt
 ./scripts/run-tests.sh
 ```
 
@@ -103,7 +103,7 @@ npx cdk deploy UserManagementBackendToolchain
 ```bash
 npx cdk destroy UserManagementBackendSandbox
 npx cdk destroy UserManagementBackendToolchain
-npx cdk destroy UserManagementBackendToolchain/Pipeline/Production/UserManagementBackend
+npx cdk destroy UserManagementBackendToolchain/Pipeline/Production/UserManagementBackendProduction
 ```
 
 Delete the AWS CodeStar Connections connection if it is no longer needed. Follow the instructions

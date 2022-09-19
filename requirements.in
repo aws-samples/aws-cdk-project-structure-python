@@ -1,4 +1,4 @@
--c api/runtime/requirements.txt
+-c backend/api/runtime/requirements.txt
 aws-cdk-lib
 aws-cdk.aws-apigatewayv2-alpha
 aws-cdk.aws-apigatewayv2-integrations-alpha
