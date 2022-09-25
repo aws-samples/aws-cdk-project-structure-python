@@ -8,23 +8,23 @@ attrs==22.1.0
     # via
     #   cattrs
     #   jsii
-aws-cdk-lib==2.43.0
+aws-cdk-lib==2.43.1
     # via
     #   -r requirements.in
     #   aws-cdk.aws-apigatewayv2-alpha
     #   aws-cdk.aws-apigatewayv2-integrations-alpha
     #   aws-cdk.aws-lambda-python-alpha
-aws-cdk.aws-apigatewayv2-alpha==2.43.0.a0
+aws-cdk.aws-apigatewayv2-alpha==2.43.1.a0
     # via
     #   -r requirements.in
     #   aws-cdk.aws-apigatewayv2-integrations-alpha
-aws-cdk.aws-apigatewayv2-integrations-alpha==2.43.0a0
+aws-cdk.aws-apigatewayv2-integrations-alpha==2.43.1a0
     # via -r requirements.in
-aws-cdk.aws-lambda-python-alpha==2.43.0a0
+aws-cdk.aws-lambda-python-alpha==2.43.1a0
     # via -r requirements.in
 cattrs==22.1.0
     # via jsii
-constructs==10.1.109
+constructs==10.1.112
     # via
     #   -r requirements.in
     #   aws-cdk-lib
@@ -33,7 +33,7 @@ constructs==10.1.109
     #   aws-cdk.aws-lambda-python-alpha
 exceptiongroup==1.0.0rc9
     # via cattrs
-jsii==1.67.0
+jsii==1.68.0
     # via
     #   aws-cdk-lib
     #   aws-cdk.aws-apigatewayv2-alpha
