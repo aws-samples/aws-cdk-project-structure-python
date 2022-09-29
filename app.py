@@ -24,7 +24,7 @@ from toolchain import Toolchain
 
 app = cdk.App()
 
-# Backend sandbox environment stack
+# Component sandbox stack
 Backend(
     app,
     constants.APP_NAME + "Sandbox",
