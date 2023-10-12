@@ -44,7 +44,7 @@ class Toolchain(cdk.Stack):
             GITHUB_TRUNK_BRANCH,
             connection_arn=GITHUB_CONNECTION_ARN,
         )
-        build_spec = {"phases": {"install": {"runtime-versions": {"python": "3.7"}}}}
+        build_spec = {"phases": {"install": {"runtime-versions": {"python": "3.11"}}}}
         synth = pipelines.CodeBuildStep(
             "Synth",
             input=source,
@@ -57,6 +57,12 @@ class Toolchain(cdk.Stack):
             self,
             "Pipeline",
             cli_version=Toolchain._get_cdk_cli_version(),
+            code_build_defaults=pipelines.CodeBuildOptions(
+                build_environment=codebuild.BuildEnvironment(
+                    # Image that supports Python 3.11
+                    build_image=codebuild.LinuxBuildImage.AMAZON_LINUX_2_5,
+                ),
+            ),
             cross_account_keys=True,
             docker_enabled_for_synth=True,
             publish_assets_in_parallel=False,

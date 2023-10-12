@@ -30,7 +30,7 @@ cd aws-cdk-project-structure-python
 
 ### Create Python virtual environment and install the dependencies
 ```bash
-python3.7 -m venv .venv
+python3.11 -m venv .venv
 source .venv/bin/activate
 
 # [Optional] Needed to upgrade dependencies and cleanup unused packages
@@ -63,8 +63,6 @@ pip-compile --upgrade backend/api/runtime/requirements.in
 pip-compile --upgrade requirements.in
 pip-compile --upgrade requirements-dev.in
 ./scripts/install-deps.sh
-# [Optional] Cleanup unused packages
-pip-sync backend/api/runtime/requirements.txt requirements.txt requirements-dev.txt
 ./scripts/run-tests.sh
 ```
 

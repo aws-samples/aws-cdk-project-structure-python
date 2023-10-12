@@ -33,7 +33,8 @@ flake8 --config .flake8 "${targets[@]}"
 isort --settings-path .isort.cfg --check --diff "${targets[@]}"
 
 # Static type checker (https://mypy.readthedocs.io)
-mypy --config-file .mypy.ini "${targets[@]}"
+MYPYPATH="${PWD}" mypy --config-file .mypy.ini --exclude runtime "${targets[@]}"
+MYPYPATH="${PWD}/backend/api/runtime" mypy --config-file .mypy.ini --explicit-package-bases backend/api/runtime
 
 # Check for errors, enforce a coding standard, look for code smells (http://pylint.pycqa.org)
 pylint --rcfile .pylintrc "${targets[@]}"

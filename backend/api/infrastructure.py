@@ -36,7 +36,7 @@ class API(Construct):
         self.lambda_function = lambda_python_alpha.PythonFunction(
             self,
             "LambdaFunction",
-            runtime=lambda_.Runtime.PYTHON_3_7,
+            runtime=lambda_.Runtime.PYTHON_3_11,
             environment={"DYNAMODB_TABLE_NAME": dynamodb_table_name},
             reserved_concurrent_executions=lambda_reserved_concurrency,
             entry=str(pathlib.Path(__file__).parent.joinpath("runtime").resolve()),
