@@ -8,7 +8,7 @@ attrs==23.1.0
     # via
     #   cattrs
     #   jsii
-aws-cdk-lib==2.100.0
+aws-cdk-lib==2.102.0
     # via
     #   -r requirements.in
     #   aws-cdk.aws-apigatewayv2-alpha
@@ -20,13 +20,13 @@ aws-cdk.asset-kubectl-v20==2.1.2
     # via aws-cdk-lib
 aws-cdk.asset-node-proxy-agent-v6==2.0.1
     # via aws-cdk-lib
-aws-cdk.aws-apigatewayv2-alpha==2.100.0.a0
+aws-cdk.aws-apigatewayv2-alpha==2.102.0.a0
     # via
     #   -r requirements.in
     #   aws-cdk.aws-apigatewayv2-integrations-alpha
-aws-cdk.aws-apigatewayv2-integrations-alpha==2.100.0a0
+aws-cdk.aws-apigatewayv2-integrations-alpha==2.102.0a0
     # via -r requirements.in
-aws-cdk.aws-lambda-python-alpha==2.100.0a0
+aws-cdk.aws-lambda-python-alpha==2.102.0a0
     # via -r requirements.in
 cattrs==23.1.2
     # via jsii

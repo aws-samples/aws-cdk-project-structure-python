@@ -4,7 +4,7 @@
 #
 #    pip-compile requirements-dev.in
 #
-astroid==3.0.0
+astroid==3.0.1
     # via pylint
 bandit==1.7.5
     # via -r requirements-dev.in
@@ -30,7 +30,7 @@ flake8==6.1.0
     # via -r requirements-dev.in
 gitdb==4.0.10
     # via gitpython
-gitpython==3.1.37
+gitpython==3.1.40
     # via bandit
 idna==3.4
     # via requests
@@ -48,7 +48,7 @@ mccabe==0.7.0
     #   pylint
 mdurl==0.1.2
     # via markdown-it-py
-mypy==1.6.0
+mypy==1.6.1
     # via -r requirements-dev.in
 mypy-extensions==1.0.0
     # via
@@ -66,7 +66,7 @@ platformdirs==3.11.0
     # via
     #   black
     #   pylint
-pycodestyle==2.11.0
+pycodestyle==2.11.1
     # via flake8
 pyflakes==3.1.0
     # via flake8
@@ -112,7 +112,7 @@ typing-extensions==4.8.0
     #   -c backend/api/runtime/requirements.txt
     #   -c requirements.txt
     #   mypy
-urllib3==2.0.6
+urllib3==2.0.7
     # via
     #   -c backend/api/runtime/requirements.txt
     #   requests
